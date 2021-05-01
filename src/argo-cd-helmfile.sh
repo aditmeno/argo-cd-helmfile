@@ -56,6 +56,12 @@ fi
 
 SCRIPT_NAME=$(basename "${0}")
 
+if [[ ${CLOUD_ENV} == "AWS" ]]; then
+  registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin
+else
+  registry-credential-helper | helm registry login -u oauth2accesstoken gcr.io --password-stdin
+fi
+
 # expand nested variables
 if [[ "${HELMFILE_GLOBAL_OPTIONS}" ]]; then
   HELMFILE_GLOBAL_OPTIONS=$(variable_expansion "${HELMFILE_GLOBAL_OPTIONS}")
@@ -234,12 +240,6 @@ case $phase in
         INTERNAL_HELM_API_VERSIONS="${INTERNAL_HELM_API_VERSIONS} --api-versions=$v"
       done
       INTERNAL_HELM_TEMPLATE_OPTIONS="${INTERNAL_HELM_TEMPLATE_OPTIONS} ${INTERNAL_HELM_API_VERSIONS}"
-    fi
-
-    if [[ ${CLOUD_ENV} == "AWS" ]]; then
-      registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin
-    else
-      registry-credential-helper | helm registry login -u oauth2accesstoken gcr.io --password-stdin
     fi
 
     ${helmfile} \
