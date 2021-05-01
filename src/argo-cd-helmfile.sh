@@ -151,6 +151,12 @@ case $phase in
       mkdir -p "${HELM_HOME}"
     fi
 
+    if [[ ${CLOUD_ENV} == "AWS" ]]; then
+      registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin
+    else
+      registry-credential-helper | helm registry login -u oauth2accesstoken gcr.io --password-stdin
+    fi
+
     if [[ -v HELMFILE_HELMFILE ]]; then
       rm -rf "${HELMFILE_HELMFILE_HELMFILED}"
       mkdir -p "${HELMFILE_HELMFILE_HELMFILED}"
@@ -240,6 +246,12 @@ case $phase in
         INTERNAL_HELM_API_VERSIONS="${INTERNAL_HELM_API_VERSIONS} --api-versions=$v"
       done
       INTERNAL_HELM_TEMPLATE_OPTIONS="${INTERNAL_HELM_TEMPLATE_OPTIONS} ${INTERNAL_HELM_API_VERSIONS}"
+    fi
+
+    if [[ ${CLOUD_ENV} == "AWS" ]]; then
+      registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin
+    else
+      registry-credential-helper | helm registry login -u oauth2accesstoken gcr.io --password-stdin
     fi
 
     ${helmfile} \
