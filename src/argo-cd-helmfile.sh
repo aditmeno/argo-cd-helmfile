@@ -57,9 +57,9 @@ fi
 SCRIPT_NAME=$(basename "${0}")
 
 if [[ ${CLOUD_ENV} == "AWS" ]]; then
-  registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin
+  registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin > /dev/null 2>&1
 else
-  registry-credential-helper | helm registry login -u oauth2accesstoken gcr.io --password-stdin
+  registry-credential-helper | helm registry login -u oauth2accesstoken gcr.io --password-stdin > /dev/null 2>&1
 fi
 
 # expand nested variables
@@ -152,9 +152,9 @@ case $phase in
     fi
 
     if [[ ${CLOUD_ENV} == "AWS" ]]; then
-      registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin
+      registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin > /dev/null 2>&1
     else
-      registry-credential-helper | helm registry login -u oauth2accesstoken gcr.io --password-stdin
+      registry-credential-helper | helm registry login -u oauth2accesstoken gcr.io --password-stdin > /dev/null 2>&1
     fi
 
     if [[ -v HELMFILE_HELMFILE ]]; then
@@ -249,9 +249,9 @@ case $phase in
     fi
 
     if [[ ${CLOUD_ENV} == "AWS" ]]; then
-      registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin
+      registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin > /dev/null 2>&1
     else
-      registry-credential-helper | helm registry login -u oauth2accesstoken gcr.io --password-stdin
+      registry-credential-helper | helm registry login -u oauth2accesstoken gcr.io --password-stdin > /dev/null 2>&1
     fi
 
     ${helmfile} \
