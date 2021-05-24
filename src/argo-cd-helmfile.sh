@@ -56,6 +56,8 @@ fi
 
 SCRIPT_NAME=$(basename "${0}")
 
+HELMFILE_VERSION="v0.139.7"
+
 if [[ ${CLOUD_ENV} == "AWS" ]]; then
   registry-credential-helper | helm registry login -u AWS ${AWS_ECR_REGISTRY}.dkr.ecr.${AWS_REGION}.amazonaws.com --password-stdin > /dev/null 2>&1
 else
@@ -109,7 +111,7 @@ else
   else
     LOCAL_HELMFILE_BINARY="/tmp/__${SCRIPT_NAME}__/bin/helmfile"
     if [[ ! -x "${LOCAL_HELMFILE_BINARY}" ]]; then
-      wget -O "${LOCAL_HELMFILE_BINARY}" "https://github.com/roboll/helmfile/releases/download/v0.139.6/helmfile_linux_amd64"
+      wget -O "${LOCAL_HELMFILE_BINARY}" "https://github.com/roboll/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_linux_amd64"
       chmod +x "${LOCAL_HELMFILE_BINARY}"
     fi
     helmfile="${LOCAL_HELMFILE_BINARY}"
